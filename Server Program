@@ -1,0 +1,47 @@
+
+from socket import *
+
+
+# imports every function from socket module. Skips dot notation
+
+
+def program_server():  # Declaration of function for server program
+
+    local = gethostname()  # Function gets Host name of end device
+    IP = gethostbyname(local)  # Function retrieves IP address of the local host
+
+    print(f'The host name is {local}.')  # Test scripts using f-strings
+    print(f'The IP address of the local device is {IP}.')
+
+    port = 2050  # Utilize any port number above 1024, as 1-1024 are reserved
+
+    server_socket = socket()  # Initialize the socket variable
+    server_socket.bind((local, port))  # Function binds the local host and chosen port number together.2 arguments
+
+    server_socket.listen(2)  # Listen function with a backlog of 2. Allows 2 outstanding connections
+    #  Only 2 connections will be needed for this server/client program
+
+    connection, address = server_socket.accept()  # Assignment statement that accepts 2 connections
+    print("Connection from: " + str(address))
+
+    while True:  # Creation of infinite while loop to run program indefinitely and wait for client request
+
+        data = connection.recv(1024).decode()  # Function that receives data with a buffer size of 1024 bytes.
+        # 1024 bytes is essentially a 1024-character limit
+        # Recv function returns bytes, and decode function converts into string.
+
+        if not data:  # If statement to break if data is not received
+
+            break
+
+        print("From connected user: " + str(data))
+        data = input(' --> ')
+
+        connection.send(data.encode())  # Send function requires data to be in byte format.
+        # Encode function converts data from string format to data format.
+
+    connection.close()  # Function that closes the connection
+
+
+if __name__ == "__main__":
+    program_server() # Function call to initiate server program
