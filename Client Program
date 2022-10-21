@@ -1,0 +1,30 @@
+from socket import *
+
+
+def client():
+    local = gethostname()  # Function gets Host Name of end device
+    port = 2050  # Chosen port number to utilize in program
+
+    client_socket = socket()  # Initialize socket for client
+    client_socket.connect((local, port))  # Connect Function initializes 3-way handshake between client/server
+
+    message = input(" --> ")  # Store client input in message variable
+
+    while message.lower().strip() != 'bye':  # While loop that terminates once sentinel value is reached
+
+        client_socket.send(message.encode())  # Send function requires data to be in byte format.
+        # Encode function converts data from string format to data format.
+
+        data = client_socket.recv(1024).decode()  # Function that receives data with a buffer size of 1024 bytes.
+        # 1024 bytes is essentially a 1024-character limit
+        # Recv function returns bytes, and decode function converts into string.
+
+        print('Received from server: ' + data)  # show in terminal
+
+        message = input(" --> ")  # Stores client input until sentinel value is reached.
+
+    client_socket.close()  # Function that closes the connection.
+
+
+if __name__ == '__main__':
+    client() # Function call to initiate client script
